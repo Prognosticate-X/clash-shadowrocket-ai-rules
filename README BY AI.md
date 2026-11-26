@@ -29,8 +29,9 @@
 
 | 文件 | 适用客户端 | 说明 |
 | --- | --- | --- |
-| `Merge.yaml` | Clash Verge Rev（mihomo 内核） | 「全局扩展覆写配置」，22 个策略组 + 9890 条规则 |
-| `Shadowrocket CC.conf` | Shadowrocket（iOS） | 完整配置文件（`[General]` / `[Rule]` / `[Proxy Group]`），21 个策略组 + 9923 条规则 |
+| `Merge.yaml` | Clash Verge Rev（mihomo 内核） | 「全局扩展覆写配置」，22 个策略组 + 9890+ 条规则 |
+| `SR Customized Config.conf` | Shadowrocket（iOS，推荐） | 轻量实测版配置（V3.1），统一使用内置 `PROXY`，针对 Siri / Apple Intelligence、Apple Maps / Find My 与 APNs 推送做了实测优化 |
+| `Shadowrocket CC.conf` | Shadowrocket（iOS） | 完整策略组版配置文件（`[General]` / `[Rule]` / `[Proxy Group]`），21 个策略组 + 9923 条规则 |
 
 两份文件的分流意图一致，差异只在客户端语法与少量平台专有规则：
 
@@ -166,7 +167,9 @@ Appstorrent 指定新加坡  →  苹果推送 / APNs 直连  →  Apple 日历 
 
 共 30 个域名 / 规则指向该组，覆盖 Siri 与 Private Cloud Compute 的关键端点，例如：
 
-`gateway.icloud.com`、`p162-acsegateway.icloud.com`、`attester.gateway.icloud.com`、`tis.gateway.icloud.com`、`mask.icloud.com`、`mask-h2.icloud.com`、`mask-api.icloud.com`、`mask*.apple-dns.net`、`apple-relay.apple.com`、`apple-relay.cloudflare.com`、`apple-relay.fastly-edge.com`、`apple-relay.akamaized.net`、`guzzoni.apple.com`、`siri.apple.com`、`pcc.apple.com`、`api.smoot.apple.com`、`api.apple-cloudkit.com`、`cdn.apple-cloudkit.com`、`icloud-content.com`、`gspe1-ssl.ls.apple.com`、`gspe35-ssl.ls.apple.com`、`ls.apple.com`、`fides.apple.com`、`playgrounds-cdn.apple.com`、`apple-sub-services.apple.com`、`cp4.cloudflare.com`
+`gateway.icloud.com`、`p162-acsegateway.icloud.com`、`attester.gateway.icloud.com`、`tis.gateway.icloud.com`、`mask.icloud.com`、`mask-h2.icloud.com`、`mask-api.icloud.com`、`mask*.apple-dns.net`、`apple-relay.apple.com`、`apple-relay.cloudflare.com`、`apple-relay.fastly-edge.com`、`apple-relay.akamaized.net`、`guzzoni.apple.com`、`siri.apple.com`、`pcc.apple.com`、`api.smoot.apple.com`、`api.apple-cloudkit.com`、`cdn.apple-cloudkit.com`、`icloud-content.com`、`gspe1-ssl.ls.apple.com`、`fides.apple.com`、`playgrounds-cdn.apple.com`、`apple-sub-services.apple.com`、`cp4.cloudflare.com`
+
+> 注：`ls.apple.com` 的其余子域（含 `gspe35-ssl.ls.apple.com`、`*-cn-ssl.ls.apple.com` 等地图瓦片与定位服务）以及常规 `apple-dns.net`、`apple-mapkit.com`、`autonavi.com`、`amap.com` 已在 `Merge.yaml` 与 `SR Customized Config.conf` 中设为直连，避免 Apple Maps 加载缓慢及 Find My 地图白屏，同时仅精准保留 `gspe1-ssl.ls.apple.com` 走代理以维持 Apple Intelligence 地区判定。
 
 实测定向结果（出口节点 = 美国）：
 
@@ -255,6 +258,15 @@ A：不会。国内域名有直连规则，未命中的域名由 `GEOIP,CN` 兜�
 ---
 
 ## 更新日志
+
+### 2026-11-27（V3.0）
+
+- **修复 Apple Maps 加载极慢 & Find My 地图不加载**（`Merge.yaml`、`SR Customized Config.conf`）：
+  - 移除宽泛的 `DOMAIN-SUFFIX,ls.apple.com`、`DOMAIN,gspe35-ssl.ls.apple.com` 与 `DOMAIN-SUFFIX,apple-dns.net` 代理规则
+  - 精准保留 `DOMAIN,gspe1-ssl.ls.apple.com` 与 `mask*.apple-dns.net` 走代理，保障 Apple Intelligence / Siri 地区判定与 PCC 链路不受影响
+  - 显式补充 `ls.apple.com`、`ls-apple.com.akadns.net`、`apple-mapkit.com`、`autonavi.com`、`amap.com`、`apple-dns.net` 直连规则
+- **优化 iOS 推送横幅**（`SR Customized Config.conf`）：将 APNs（`push.apple.com`、`push-apple.com.akadns.net`、`DST-PORT,5223`）改为 `PROXY`，解决 Telegram / X 无法收到系统推送横幅的问题
+- 文档补充收录 `SR Customized Config.conf`
 
 ### 2026-09-24
 

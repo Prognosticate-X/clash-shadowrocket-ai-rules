@@ -256,7 +256,6 @@ rules:
 - DOMAIN-KEYWORD,generativelanguage,✨ Gemini & Antigravity
 - DOMAIN-KEYWORD,antigravity,✨ Gemini & Antigravity
 - DOMAIN-SUFFIX,aiplatform.googleapis.com,✨ Gemini & Antigravity
-- DOMAIN-SUFFIX,apple-dns.net,🤖 Siri & Apple AI
 - DOMAIN-SUFFIX,api.apple-cloudkit.com,🤖 Siri & Apple AI
 - DOMAIN-SUFFIX,cdn.apple-cloudkit.com,🤖 Siri & Apple AI
 - DOMAIN-SUFFIX,icloud-content.com,🤖 Siri & Apple AI
@@ -286,9 +285,8 @@ rules:
 - DOMAIN-SUFFIX,mask-h2.icloud.com,🤖 Siri & Apple AI
 - DOMAIN-SUFFIX,mask-api.icloud.com,🤖 Siri & Apple AI
 - DOMAIN,cp4.cloudflare.com,🤖 Siri & Apple AI
+# 仅保留 GeoServices 地区码判定端点走代理 (避免全量 ls.apple.com 劫持 Apple Maps / Find My 地图瓦片)
 - DOMAIN,gspe1-ssl.ls.apple.com,🤖 Siri & Apple AI
-- DOMAIN,gspe35-ssl.ls.apple.com,🤖 Siri & Apple AI
-- DOMAIN-SUFFIX,ls.apple.com,🤖 Siri & Apple AI
 - DOMAIN-SUFFIX,fides.apple.com,🤖 Siri & Apple AI
 - DOMAIN-SUFFIX,playgrounds-cdn.apple.com,🤖 Siri & Apple AI
 - DOMAIN-SUFFIX,apple-sub-services.apple.com,🤖 Siri & Apple AI
@@ -298,6 +296,13 @@ rules:
 - DOMAIN-SUFFIX,oaistatic.com,🤖 Siri & Apple AI
 - DOMAIN-SUFFIX,oaiusercontent.com,🤖 Siri & Apple AI
 - DOMAIN-KEYWORD,openaicom,🤖 Siri & Apple AI
+# ==================== 🗺️ Apple Maps / Find My 地图与定位直连 (gspe1-ssl.ls.apple.com 已在上方优先走 Siri & Apple AI) ====================
+- DOMAIN-SUFFIX,ls.apple.com,DIRECT
+- DOMAIN-SUFFIX,ls-apple.com.akadns.net,DIRECT
+- DOMAIN-SUFFIX,apple-mapkit.com,DIRECT
+- DOMAIN-SUFFIX,autonavi.com,DIRECT
+- DOMAIN-SUFFIX,amap.com,DIRECT
+- DOMAIN-SUFFIX,apple-dns.net,DIRECT
 - DOMAIN-SUFFIX,instagram.com,🔰 选择节点
 - DOMAIN-SUFFIX,cdninstagram.com,🔰 选择节点
 - DOMAIN-KEYWORD,instagram,🔰 选择节点
@@ -491,7 +496,6 @@ rules:
 - DOMAIN-SUFFIX,media-amazon.com,🔰 选择节点
 - DOMAIN-SUFFIX,pv-cdn.net,🔰 选择节点
 - DOMAIN-SUFFIX,seattlespheres.com,🔰 选择节点
-- DOMAIN,gspe1-ssl.ls.apple.com,🔰 选择节点
 - DOMAIN,np-edge.itunes.apple.com,🔰 选择节点
 - DOMAIN,play-edge.itunes.apple.com,🔰 选择节点
 - DOMAIN-SUFFIX,tv.apple.com,🔰 选择节点
